@@ -1,0 +1,95 @@
+.app {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+    background-color: white; /* 전체 배경색 */
+}
+
+.header {
+    background-color: #4A90E2; /* 채도가 높은 하늘색으로 변경 */
+    padding: 8px 64px;
+    display: flex;
+    justify-content: center; /* 중앙 정렬 */
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    border-bottom: 1px solid white;
+}
+
+.page-title {
+    margin-right: auto; /* 홈 버튼 왼쪽에 여백 추가 */
+    font-family: 'Poppins', sans-serif; /* 홈 버튼 폰트 변경 */
+}
+
+.topnav {
+    display: flex;
+    align-items: center;
+    gap: 16px; /* 버튼 간격 */
+}
+
+.home-button {
+    color: white; /* 홈 버튼 텍스트 색상 */
+    font-family: 'Poppins', sans-serif; /* 홈 버튼 폰트 변경 */
+    font-weight: bold;
+    font-size: 28px;
+    padding: 0;
+    transition: color 0.3s ease;
+}
+
+.home-button:hover {
+    color: #d0e1ff; /* 호버 색상 변경 */
+}
+
+.auth-button {
+    color: white; /* 로그인 버튼 텍스트 색상 */
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+    font-size: 18px;
+    padding: 0;
+    transition: color 0.3s ease;
+}
+
+.auth-button:hover {
+    color: #d0e1ff; /* 호버 색상 변경 */
+}
+
+.contents {
+    flex: 1;
+    padding: 24px 32px;
+    background-color: white; /* 콘텐츠 배경색 */
+    min-height: 400px; /* 콘텐츠 최소 높이 증가 */
+}
+
+.footer {
+    text-align: center;
+    padding: 24px 32px;
+    background-color: #f0f2f5; /* 연한 회색으로 변경 */
+    border-top: 1px solid #e8e8e8;
+    color: #6c757d;
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.footer-links {
+    display: flex;
+    gap: 24px; /* 링크 간격 */
+    margin: 16px 0; /* 링크와 텍스트 간격 */
+}
+
+.footer-links a {
+    color: #999; /* 링크 색상 변경 */
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: #666; /* 링크 호버 색상 변경 */
+}
+
+.footer-info {
+    font-size: 12px;
+    color: #999;
+    margin-top: 16px; /* 푸터 정보와 링크 간격 추가 */
+}
