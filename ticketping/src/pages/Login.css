@@ -1,0 +1,47 @@
+.Login {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    min-height: 60vh;
+    background-color: #ffffff;
+}
+
+.card {
+    width: 500px;
+    border-radius: 8px; 
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); 
+    padding: 20px; 
+}
+
+.card-title {
+    color: #666666; 
+}
+
+.tail-wrapper {
+    display: flex;
+    justify-content: center; 
+    margin-top: 12px; 
+}
+
+.button {
+    width: 20%; 
+}
+
+.form-item {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 24px; 
+    width: 100%; 
+    max-width: 500px; 
+}
+
+.form-label {
+    width: 50px; 
+    min-width: 70px; 
+    text-align: left; 
+}
+
+.form-wrapper {
+    flex: 1;
+    width: calc(100% - 0px); 
+}
