@@ -1,15 +1,20 @@
 import React from "react";
-import { Button } from "antd";
-import { useAppContext } from "../store";
 import { useNavigate } from "react-router-dom";
-import "./AppLayout.css"; // CSS 파일 임포트
+import { useAppContext } from "../store";
+import { Button } from "antd";
+import { processLogout } from "./Logout"; 
+import "./AppLayout.css"; 
 
 function AppLayout({ children }) {
   const navigate = useNavigate();
-  const {
-    store: { isAuthenticated },
-  } = useAppContext();
+  const { dispatch } = useAppContext();
 
+  const { store: { jwtToken, isAuthenticated } } = useAppContext();
+
+  const handleLogout = () => {
+    processLogout(dispatch, jwtToken, navigate); 
+  };
+  
   return (
     <div className="app">
       <div className="header">
@@ -28,7 +33,7 @@ function AppLayout({ children }) {
             <Button
               type="link"
               className="auth-button"
-              onClick={() => navigate("/logout")}
+              onClick={handleLogout} 
             >
               Logout
             </Button>
