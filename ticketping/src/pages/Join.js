@@ -3,7 +3,7 @@ import { Card, Form, Input, Button, notification } from "antd";
 import { SmileOutlined, FrownOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { axiosInstance } from "../api";
-import "./Join.css";
+import "../style/Join.css";
 
 export default function Join() {
   const navigate = useNavigate();
