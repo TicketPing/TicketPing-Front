@@ -1,78 +1,69 @@
 import React, { useState } from "react";
 import { Card, Form, Input, Button, notification } from "antd";
 import { SmileOutlined, FrownOutlined } from "@ant-design/icons";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { axiosInstance } from "../api";
 import { useAppContext, setToken } from "../store";
 import "./Login.css";
 
 export default function Login() {
-  const { dispatch } = useAppContext();
-  const location = useLocation();
   const navigate = useNavigate();
+  const { dispatch } = useAppContext();
   const [fieldErrors, setFieldErrors] = useState({});
+  const [form] = Form.useForm(); 
 
-  const { from: loginRedirectUrl } = location.state || {
-    from: { pathname: "/" },
-  };
+  const onFinish = async (values) => {
+    const { email, password } = values;
 
-  const onFinish = (values) => {
-    async function fn() {
-      const { email, password } = values;
+    setFieldErrors({});
 
-      setFieldErrors({});
+    const data = { email, password };
+    try {
+      const response = await axiosInstance.post("/api/v1/auth/login", data);
+      const jwtToken = response.data.data.accessToken;
 
-      const data = { email, password };
-      try {
-        const response = await axiosInstance.post("api/v1/auth/login", data);
-        const {
-          data: { accessToken: jwtToken },
-        } = response;
+      notification.open({
+        message: "로그인 완료",
+        icon: <SmileOutlined style={{ color: "#108ee9" }} />,
+      });
 
-        dispatch(setToken(jwtToken));
-
+      dispatch(setToken(jwtToken));
+      navigate("/");
+    } catch (error) {
+      if (error.response) {
         notification.open({
-          message: "로그인 완료",
-          icon: <SmileOutlined style={{ color: "#108ee9" }} />,
+          message: `로그인 실패`,
+          description: error.response.data.message,
+          icon: <FrownOutlined style={{ color: "#ff3333" }} />,
         });
 
-        navigate(loginRedirectUrl);
-      } catch (error) {
-        if (error.response) {
-          notification.open({
-            message: `로그인 실패`,
-            icon: <FrownOutlined style={{ color: "#ff3333" }} />,
-          });
-
-          setFieldErrors((prevErrors) => {
-            const updatedErrors = {};
-            for (const [fieldName, errors] of Object.entries(prevErrors)) {
-              const errorMessage =
-                errors instanceof Array ? errors.join(" ") : errors;
-              updatedErrors[fieldName] = {
-                validateStatus: "error",
-                help: errorMessage,
-              };
-            }
-            return {
-              ...prevErrors,
-              ...updatedErrors,
+        setFieldErrors((prevErrors) => {
+          const updatedErrors = {};
+          for (const [fieldName, errors] of Object.entries(prevErrors)) {
+            const errorMessage =
+              errors instanceof Array ? errors.join(" ") : errors;
+            updatedErrors[fieldName] = {
+              validateStatus: "error",
+              help: errorMessage,
             };
-          });
-        }
+          }
+          return {
+            ...prevErrors,
+            ...updatedErrors,
+          };
+        });
       }
     }
-    fn();
   };
 
   return (
     <div className="Login">
       <Card className="card" title={<span className="card-title">로그인</span>}>
-        <Form onFinish={onFinish} autoComplete={"false"}>
+        <Form form={form} onFinish={onFinish} autoComplete="off">
           <Form.Item
             className="form-item"
             label={<span className="form-label">Email</span>}
-            name="name"
+            name="email"
             rules={[{ required: true, message: "Please input your email!" }]}
             hasFeedback
             {...fieldErrors.email}
