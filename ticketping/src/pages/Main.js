@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { axiosInstance } from "../api";
 import { Link } from "react-router-dom";
 import "../style/Main.css";
 
@@ -8,38 +9,51 @@ function Main() {
   const [performances, setPerformances] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [error, setError] = useState(null);
 
   const fetchPerformances = async (page) => {
+    if (isLoading || !hasMore || error) return;
     setIsLoading(true);
+
     try {
-      const response = await new Promise((resolve) => {
-        setTimeout(() => {
-          const start = (page - 1) * ITEMS_PER_LOAD;
-
-          const newPerformances = Array.from({ length: ITEMS_PER_LOAD }, (_, i) => ({
-            id: start + i + 1,
-            name: `공연 ${start + i + 1}`,
-            startDate: "2024-01-01",
-            endDate: "2024-01-10",
-            venue: `공연장 ${start + i + 1}`,
-            poster: "https://via.placeholder.com/300x400",
-          })).filter((_, idx) => start + idx < 10);
-
-          resolve(newPerformances);
-        }, 1000);
+      const response = await axiosInstance.get("http://localhost:10001/api/v1/performances", {
+        params: {
+          page,
+          size: ITEMS_PER_LOAD,
+        },
       });
 
-      if (response.length === 0) {
+      const { content, last } = response.data.data;
+
+      if (content.length === 0 || last) {
         setHasMore(false);
-      } else {
-        setPerformances((prev) => [...prev, ...response]);
-        setCurrentPage(page);
       }
-    } catch (error) {
-      console.error("Error fetching performances:", error);
+
+      const newPerformances = content.map((item) => ({
+        id: item.id,
+        name: item.name,
+        startDate: item.startDate,
+        endDate: item.endDate,
+        venue: item.performanceHallName,
+        poster: item.posterUrl,
+      }));
+
+      setPerformances((prev) => [...prev, ...newPerformances]);
+      setCurrentPage(page);
+      setError(null);
+    } catch (err) {
+      console.error("Error fetching performances:", err);
+      if (err.response) {
+        setError(err.response.data.message || "서버 오류가 발생했습니다.");
+      } else if (err.request) {
+        setError("서버 응답이 없습니다. 잠시 후 다시 시도해주세요.");
+      } else {
+        setError("알 수 없는 오류가 발생했습니다.");
+      }
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -48,7 +62,8 @@ function Main() {
         window.innerHeight + document.documentElement.scrollTop >=
         document.documentElement.offsetHeight - 100 &&
         !isLoading &&
-        hasMore
+        hasMore &&
+        !error
       ) {
         fetchPerformances(currentPage + 1);
       }
@@ -56,16 +71,20 @@ function Main() {
 
     window.addEventListener("scroll", handleScroll);
 
-    if (currentPage === 1 && performances.length === 0) {
-      fetchPerformances(1);
+    if (currentPage === 0 && performances.length === 0 && !error) {
+      fetchPerformances(0);
     }
 
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [performances, currentPage, isLoading, hasMore]);
+  }, [currentPage, isLoading, hasMore, error]);
 
   return (
     <div className="container">
       <h1>공연 목록</h1>
+      {error && <div className="error-message">{error}</div>}
+      {performances.length === 0 && !isLoading && !error && (
+        <div className="no-performances">현재 공연이 존재하지 않습니다.</div>
+      )}
       <div className="grid">
         {performances.map((performance) => (
           <div className="poster-container" key={performance.id}>

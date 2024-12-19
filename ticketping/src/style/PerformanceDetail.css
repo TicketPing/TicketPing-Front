@@ -25,7 +25,7 @@
   width: 50%;
   height: 550px;
   min-width: 55vb;
-  position: relative; /* 버튼 고정을 위한 설정 */
+  position: relative;
 }
 
 .details h2 {
@@ -46,7 +46,8 @@
 .performance-table th,
 .performance-table td {
   text-align: left;
-  padding: 8px 12px;
+  padding: 10px 12px;
+  vertical-align: top;
 }
 
 .performance-table th {
@@ -57,6 +58,11 @@
 
 .performance-table td {
   color: #555;
+}
+
+.performance-table td.price-cell {
+  background-color: #f2f2f2;
+  padding: 15px 20px;
 }
 
 button {

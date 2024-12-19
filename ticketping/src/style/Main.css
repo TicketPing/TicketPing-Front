@@ -27,31 +27,29 @@ body {
   width: 250px;
   height: 400px;
   overflow: hidden;
-  text-align: center; 
 }
 
 .poster {
   position: relative;
-  overflow: hidden;
   width: 230px;
   height: 300px;
   transition: transform 0.3s ease;
 }
 
 .poster:hover {
-  transform: scale(1.05);
+  transform: scale(1.05); 
+}
+
+.poster-info {
+  margin-top: 10px;
 }
 
 .poster img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: fill;
 }
 
-.poster-info {
-  padding: 10px;
-  border-radius: 5px;
-}
 
 .poster-info h3 {
   font-size: 16px;
