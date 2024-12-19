@@ -4,7 +4,7 @@ import { SmileOutlined, FrownOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { axiosInstance } from "../api";
 import { useAppContext, setToken } from "../store";
-import "./Login.css";
+import "../style/Login.css";
 
 export default function Login() {
   const navigate = useNavigate();
