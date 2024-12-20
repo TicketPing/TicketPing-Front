@@ -8,10 +8,10 @@
 
 .header {
     background-color: #4A90E2; 
-    padding: 8px 64px;
+    padding: 32px 128px 0px 64px; 
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: space-between; 
+    align-items: center; 
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     border-bottom: 1px solid white;
 }
@@ -19,11 +19,13 @@
 .page-title {
     margin-right: auto; 
     font-family: 'Poppins', sans-serif; 
+    display: flex;
+    align-items: center; 
 }
 
 .topnav {
     display: flex;
-    align-items: center;
+    align-items: center; 
     gap: 16px; 
 }
 

@@ -2,19 +2,17 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../store";
 import { Button } from "antd";
-import { processLogout } from "./Logout"; 
-import "./AppLayout.css"; 
+import { Logout } from "./Logout";
+import "../style/AppLayout.css";
 
 function AppLayout({ children }) {
   const navigate = useNavigate();
-  const { dispatch } = useAppContext();
+  const {
+    store: { isAuthenticated },
+  } = useAppContext();
 
-  const { store: { jwtToken, isAuthenticated } } = useAppContext();
+  const { handleLogout } = Logout();
 
-  const handleLogout = () => {
-    processLogout(dispatch, jwtToken, navigate); 
-  };
-  
   return (
     <div className="app">
       <div className="header">
@@ -29,12 +27,15 @@ function AppLayout({ children }) {
         </h1>
 
         <div className="topnav">
+          <Button
+            type="link"
+            className="auth-button"
+            onClick={() => navigate("/mypage")}
+          >
+            MyPage
+          </Button>
           {isAuthenticated ? (
-            <Button
-              type="link"
-              className="auth-button"
-              onClick={handleLogout} 
-            >
+            <Button type="link" className="auth-button" onClick={handleLogout}>
               Logout
             </Button>
           ) : (

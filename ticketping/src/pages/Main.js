@@ -17,7 +17,7 @@ function Main() {
     setIsLoading(true);
 
     try {
-      const response = await axiosInstance.get("http://localhost:10001/api/v1/performances", {
+      const response = await axiosInstance.get("/api/v1/performances", {
         params: {
           page,
           size: ITEMS_PER_LOAD,

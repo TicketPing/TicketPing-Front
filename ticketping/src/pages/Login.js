@@ -10,7 +10,7 @@ export default function Login() {
   const navigate = useNavigate();
   const { dispatch } = useAppContext();
   const [fieldErrors, setFieldErrors] = useState({});
-  const [form] = Form.useForm(); 
+  const [form] = Form.useForm();
 
   const onFinish = async (values) => {
     const { email, password } = values;
@@ -82,13 +82,11 @@ export default function Login() {
             <Input.Password className="form-wrapper" />
           </Form.Item>
 
-          <div className="tail-wrapper">
+          <div className="button-container">
             <Button htmlType="submit" className="button">
               Login
             </Button>
-          </div>
 
-          <div className="tail-wrapper">
             <Button className="button">
               <a href="/join">Join</a>
             </Button>

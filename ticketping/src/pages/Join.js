@@ -91,11 +91,9 @@ export default function Join() {
             <Input.Password className="form-wrapper" />
           </Form.Item>
 
-          <div className="tail-wrapper">
-            <Button htmlType="submit" className="button">
-              Submit
-            </Button>
-          </div>
+          <Button htmlType="submit" className="button">
+            Submit
+          </Button>
         </Form>
       </Card>
     </div>
