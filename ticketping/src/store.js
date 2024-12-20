@@ -3,11 +3,9 @@ import { getStorageItem, setStorageItem } from "./utils/useLocalStorage";
 
 const AppContext = createContext();
 
-// Actions
 const SET_TOKEN = "APP/SET_TOKEN";
 const DELETE_TOKEN = "APP/DELETE_TOKEN";
 
-// Action Creators
 export const setToken = token => ({ type: SET_TOKEN, payload: token });
 export const deleteToken = () => ({ type: DELETE_TOKEN });
 
@@ -43,7 +41,6 @@ export const AppProvider = ({ children }) => {
     isAuthenticated: jwtToken.length > 0
   });
 
-  // Side effect 처리를 위한 useEffect
   useEffect(() => {
     if (store.jwtToken) {
       setStorageItem("jwtToken", store.jwtToken);
