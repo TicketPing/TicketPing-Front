@@ -8,6 +8,7 @@ import Login from './pages/Login';
 import VerificationInfo from './pages/Join';
 import MyPage from './pages/MyPage';
 import NotFound from './pages/NotFound';
+import SelectSchedule from './pages/SelectSchedule';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/performance/:id" element={<PerformanceDetail />} />
         <Route path='/login' element={<Login />}></Route>
         <Route path='/join' element={<VerificationInfo />}></Route>
+        <Route path="/performance/:id/schedule" element={<LoginRequiredRoute><SelectSchedule /></LoginRequiredRoute>} />
         <Route path='*' element={<NotFound />}></Route>
       </Routes>
     </AppLayout>
