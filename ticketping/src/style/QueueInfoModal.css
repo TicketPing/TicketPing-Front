@@ -23,6 +23,7 @@
   background-color: rgba(255, 255, 255, 0.2); 
   padding: 10px; 
   border-radius: 5px; 
+  color: #4A90E2; 
 }
 
 .progress-bar {
@@ -35,14 +36,15 @@
 }
 
 .modal-divider {
-  width: 100%; 
+  width: 120%; 
   height: 1px; 
-  background-color: #000; 
-  margin: 10px 0;
+  background-color: #555555; 
+  margin: 30px 10px;
 }
 
 .ant-btn {
   margin-top: 25px;
+  margin-bottom: -5px;
   width: auto; 
 }
   
