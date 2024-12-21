@@ -2,16 +2,14 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../store";
 import { Button } from "antd";
-import { Logout } from "./Logout";
+import { useLogout } from "./Logout"; 
 import "../style/AppLayout.css";
 
 function AppLayout({ children }) {
   const navigate = useNavigate();
-  const {
-    store: { isAuthenticated },
-  } = useAppContext();
+  const {store: { isAuthenticated } } = useAppContext();
 
-  const { handleLogout } = Logout();
+  const { logout } = useLogout(); 
 
   return (
     <div className="app">
@@ -35,7 +33,7 @@ function AppLayout({ children }) {
             MyPage
           </Button>
           {isAuthenticated ? (
-            <Button type="link" className="auth-button" onClick={handleLogout}>
+            <Button type="link" className="auth-button" onClick={logout}>
               Logout
             </Button>
           ) : (

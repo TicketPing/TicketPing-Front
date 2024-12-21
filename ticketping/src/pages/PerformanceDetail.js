@@ -1,23 +1,30 @@
-// PerformanceDetail.js
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { axiosInstance } from "../api";
+import { useEnterQueue } from "../component/EnterQueue"; 
+import QueueInfoModal from "../component/QueueInfoModal"; 
+import { useAppContext } from "../store";
+import { notification } from "antd";
+import { FrownOutlined } from "@ant-design/icons";
 import "../style/PerformanceDetail.css";
 
 function PerformanceDetail() {
   const { id } = useParams();
+  const {store: { isAuthenticated } } = useAppContext();
+
   const [performance, setPerformance] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [timeRemaining, setTimeRemaining] = useState(null);
 
+  const [isModalVisible, setIsModalVisible] = useState(false); 
+  const { enterQueue } = useEnterQueue(setIsModalVisible); 
+
   useEffect(() => {
     const fetchPerformance = async () => {
-      console.log("Fetching performance details for ID:", id);
       try {
         setIsLoading(true);
-        const response = await axiosInstance.get(`http://localhost:10001/api/v1/performances/${id}`);
-        console.log("Performance data fetched successfully:", response.data);
+        const response = await axiosInstance.get(`/api/v1/performances/${id}`);
         setPerformance(response.data.data);
       } catch (err) {
         console.error("Error fetching performance:", err);
@@ -37,7 +44,6 @@ function PerformanceDetail() {
   useEffect(() => {
     if (performance) {
       const updateRemainingTime = () => {
-        console.log("Updating remaining time...");
         const now = new Date();
         const bookingDate = new Date(performance.reservationStartDate);
         const endBookingDate = new Date(performance.reservationEndDate);
@@ -69,12 +75,10 @@ function PerformanceDetail() {
   }, [performance]);
 
   const formatPrice = (price) => {
-    console.log("Formatting price:", price);
     return price.toLocaleString();
   };
 
   if (isLoading) {
-    console.log("Loading state active...");
     return <p>로딩 중...</p>;
   }
 
@@ -83,7 +87,16 @@ function PerformanceDetail() {
     return <p>{error}</p>;
   }
 
-  console.log("Rendering performance details:", performance);
+  const handleEnterQueue = (performanceId) => {
+    if (isAuthenticated) {
+      enterQueue(performanceId);
+    } else {
+      notification.open({
+        message: "로그인이 필요합니다!",
+        icon: <FrownOutlined style={{ color: "#ff3333" }} />
+      });
+    }
+  };
 
   return (
     <div className="performance-detail">
@@ -105,11 +118,15 @@ function PerformanceDetail() {
             <tr>
               <th>가격</th>
               <td className="price-cell">
-                {performance.seatCostResponses.map((seat, index) => (
-                  <div key={index}>
-                    {seat.seatGrade} {formatPrice(seat.cost)}원
-                  </div>
-                ))}
+                {Array.isArray(performance.seatCostResponses) && performance.seatCostResponses.length > 0 ? (
+                  performance.seatCostResponses.map((seat, index) => (
+                    <div key={index}>
+                      {seat.seatGrade} {formatPrice(seat.cost)}원
+                    </div>
+                  ))
+                ) : (
+                  <div>가격 정보가 없습니다.</div>
+                )}
               </td>
             </tr>
             <tr>
@@ -124,7 +141,18 @@ function PerformanceDetail() {
             </tr>
           </tbody>
         </table>
-        <button disabled={timeRemaining !== "공연 예매하기"}>{timeRemaining}</button>
+        <button 
+          disabled={timeRemaining !== "공연 예매하기"}
+          onClick={() => handleEnterQueue(id)} 
+        >
+          {timeRemaining}
+        </button>
+
+        <QueueInfoModal
+          visible={isModalVisible}
+          onClose={() => setIsModalVisible(false)}
+          performanceId={id}
+        />
       </div>
     </div>
   );
