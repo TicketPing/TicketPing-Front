@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, Button } from 'antd';
+import { Modal, Button, Progress } from 'antd';
 import { useAppContext } from "../store";
 import { axiosInstance } from "../api";
 import { useNavigate } from "react-router-dom";
@@ -17,13 +17,14 @@ const QueueInfoModal = ({ visible, onClose, performanceId }) => {
   const fetchQueueInfo = async () => {
     try {
       const response = await axiosInstance.get(`/api/v1/waiting-queue?performanceId=${performanceId}`, { headers });
+     
+      console.log(response);
+
       setTokenStatus(response.data.data.tokenStatus);
       setPosition(response.data.data.position);
       setTotalUsers(response.data.data.totalUsers);
-
-      console.log(response.data.data);
       
-      if (tokenStatus === "WORKING") {
+      if (response.data.data.tokenStatus === "WORKING") {
         navigate(`/performance/${performanceId}/schedule`);
       }
     } catch (error) {
@@ -34,26 +35,37 @@ const QueueInfoModal = ({ visible, onClose, performanceId }) => {
   useEffect(() => {
     if (visible) { 
       fetchQueueInfo(); 
+
+      const intervalId = setInterval(fetchQueueInfo, 3000); // 3초 주기 Polling
+
+      return () => clearInterval(intervalId); 
     }
   }, [visible]); 
 
-  const progressPercentage = totalUsers > 0 ? (position / totalUsers) * 100 : 0; 
+  const progressPercentage = totalUsers > 0 ? ((totalUsers - position) / totalUsers * 100).toFixed(1) : 0;
 
   return (
     <Modal
-      visible={visible}
+      open={visible}
       footer={null} 
       closable={false} 
-      styles={{ mask: { backgroundColor: 'rgba(0, 0, 0, 0.85)' } }}
+      styles={{ mask: { backgroundColor: 'rgba(0, 0, 0, 0.90)' } }}
     >
       <div className="queue-entry-modal-content">
         <h3 className="waiting-message">티켓 예매를 위해 접속 대기중입니다.</h3>
 
         <h1 className="queue-number">나의 대기 순번: {position}</h1>
 
-        <div className="progress-bar" style={{ width: `${progressPercentage}%` }}></div>
+        <Progress 
+          percent={progressPercentage} 
+          status="active" 
+          strokeColor={{ '0%': '#108ee9', '100%': '#87d068' }} 
+          style={{ marginBottom: '16px' }}
+        />
 
-        <h1 className="waiting-message">현재 {totalUsers}명이 대기 중에 있습니다.</h1>
+        <h1 className="waiting-message">
+          현재 <span style={{ color: '#4A90E2' }}>{totalUsers}</span>명 중 <span style={{ color: '#4A90E2' }}>{position}</span>번째로 대기 중입니다.
+        </h1>
 
         <div className="modal-divider"></div>
 
