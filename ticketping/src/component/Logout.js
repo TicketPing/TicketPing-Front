@@ -3,11 +3,15 @@ import { notification } from "antd";
 import { MehOutlined } from "@ant-design/icons";
 import { axiosInstance } from "../api";
 import { useAppContext, deleteToken } from "../store";
+import { useCheckExpiredToken } from "./CheckExpiredToken"; 
 
 export const useLogout = () => {
   const navigate = useNavigate();
   const { dispatch } = useAppContext();
   const { store: { jwtToken } } = useAppContext();
+
+  // 토큰 만료 확인 및 재발급
+  const { checkExpiredToken } = useCheckExpiredToken(); 
 
   const logout = async () => {
     const headers = { Authorization: jwtToken };
@@ -24,7 +28,8 @@ export const useLogout = () => {
 
       navigate("/"); 
     } catch (error) {
-      console.error("로그아웃 중 오류 발생:", error);
+      // 토큰 만료 확인 및 재발급
+      checkExpiredToken(error.response.data);
     }
   };
 
