@@ -17,14 +17,11 @@ const QueueInfoModal = ({ visible, onClose, performanceId }) => {
   const fetchQueueInfo = async () => {
     try {
       const response = await axiosInstance.get(`/api/v1/waiting-queue?performanceId=${performanceId}`, { headers });
-     
-      console.log(response);
-
       setTokenStatus(response.data.data.tokenStatus);
       setPosition(response.data.data.position);
       setTotalUsers(response.data.data.totalUsers);
       
-      if (response.data.data.tokenStatus === "WORKING") {
+      if (tokenStatus === "WORKING") {
         navigate(`/performance/${performanceId}/schedule`);
       }
     } catch (error) {
