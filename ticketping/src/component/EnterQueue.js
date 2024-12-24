@@ -11,11 +11,14 @@ export const useEnterQueue = (setIsModalVisible) => {
 
   const enterQueue = async (performanceId) => {
     try { 
-      await axiosInstance.get(`/api/v1/waiting-queue?performanceId=${performanceId}`, { headers });
-      
-      // 이미 대기열에 있는 인원
-      setIsModalVisible(true); 
+      const response = await axiosInstance.get(`/api/v1/waiting-queue?performanceId=${performanceId}`, { headers });
+      const tokenStatus = response.data.data.tokenStatus;
 
+      if (tokenStatus === "WAITING") {
+        setIsModalVisible(true); 
+      } else if (tokenStatus === "WORKING") {
+        navigate(`/performance/${performanceId}/schedule`);
+      }
     } catch (error) {
 
       // 대기열에 없는 인원
