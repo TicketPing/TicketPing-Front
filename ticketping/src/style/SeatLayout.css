@@ -1,0 +1,54 @@
+.stage {
+  width: 100%;
+  text-align: center;
+  background-color: #9c9b9b;
+  color: white;
+  font-size: 1.2rem;
+  padding: 10px 0;
+  margin-bottom: 20px;
+}
+
+.seat-layout-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.seat-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  width: 100%;
+}
+
+.seat {
+  width: 50px;
+  height: 50px;
+  background-color: #e0e0e0;
+  border: 1px solid #b0b0b0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.seat.reserved {
+  background-color: #7e7b7b;
+  cursor: not-allowed;
+}
+
+.seat.selected {
+  background-color: #4caf50;
+}
+
+.seat:hover:not(.reserved):not(.selected) {
+  background-color: #c0c0c0;
+}
+
+.seat-grade {
+  width: 50px;
+  text-align: center;
+  font-weight: bold;
+  color: #333;
+}
