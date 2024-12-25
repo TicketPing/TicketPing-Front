@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { axiosInstance } from "../../api";
 import { useAppContext } from "../../store";
 import SeatLayout from './SeatLayout';
 import '../../style/Seat.css';
 
 function Seat() {
+  const location = useLocation();
+  const { performance } = location.state || {};
   const { performanceId, scheduleId } = useParams();
   const { store: { jwtToken } } = useAppContext();
   const [seats, setSeats] = useState([]);
@@ -17,7 +19,7 @@ function Seat() {
   // rows, columns, performanceName은 performance 정보 받아온 거에 맞춰서 바꾸기
   const rows = 10; 
   const columns = 5; 
-  const performanceName = "햄릿"; 
+  const performanceName = performance.name; 
   const grades = ['S', 'S', 'A', 'A', 'B', 'B', 'B', 'B', 'B', 'B', 'B'];
   const headers = { Authorization: jwtToken };
 

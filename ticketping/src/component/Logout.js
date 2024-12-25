@@ -10,7 +10,6 @@ export const useLogout = () => {
   const { dispatch } = useAppContext();
   const { store: { jwtToken } } = useAppContext();
 
-  // 토큰 만료 확인 및 재발급
   const { checkExpiredToken } = useCheckExpiredToken(); 
 
   const logout = async () => {
@@ -28,7 +27,6 @@ export const useLogout = () => {
 
       navigate("/"); 
     } catch (error) {
-      // 토큰 만료 확인 및 재발급
       checkExpiredToken(error.response.data);
     }
   };

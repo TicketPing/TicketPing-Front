@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { axiosInstance } from "../api";
 import { useAppContext } from "../store";
 import { Calendar, Button } from 'antd';
@@ -9,6 +9,9 @@ import "../style/SelectSchedule.css";
 export default function SelectSchedule() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+  const { performance } = location.state || {};
+
   const { store: { jwtToken } } = useAppContext();
   const headers = { Authorization: jwtToken };
 
@@ -72,11 +75,7 @@ export default function SelectSchedule() {
 
   const handleDateSelect = () => {
     if (selectedDateId) {
-      console.log(`공연 id: ${id}`);
-      console.log(`선택된 스케줄 id: ${selectedDateId}`);
-      
-      // 좌석 선점 페이지 이동
-      navigate('/'); 
+      navigate(`/performance/${id}/schedule/${selectedDateId}/seat`, { state: { performance } }); 
     } else {
 
     }

@@ -87,9 +87,9 @@ function PerformanceDetail() {
     return <p>{error}</p>;
   }
 
-  const handleEnterQueue = (performanceId) => {
+  const handleEnterQueue = (performance) => {
     if (isAuthenticated) {
-      enterQueue(performanceId);
+      enterQueue(performance);
     } else {
       notification.open({
         message: "로그인이 필요합니다!",
@@ -143,7 +143,7 @@ function PerformanceDetail() {
         </table>
         <button 
           disabled={timeRemaining !== "공연 예매하기"}
-          onClick={() => handleEnterQueue(id)} 
+          onClick={() => handleEnterQueue(performance)} 
         >
           {timeRemaining}
         </button>
