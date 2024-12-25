@@ -1,29 +1,110 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { axiosInstance } from "../../api";
+import { useAppContext } from "../../store";
 import SeatLayout from './SeatLayout';
 import '../../style/Seat.css';
 
 function Seat() {
-  const rows = 5;
-  const columns = 10;
-  const performanceName = "햄릿";
-
-  const grades = ['S', 'A', 'B', 'B', 'B'];
-  
-  const seats = Array.from({ length: rows * columns }, (_, index) => ({
-    grade: grades[Math.floor(index / columns)],
-    price: 10000,
-    reserved: index % 7 === 0,
-  }));
-
+  const { performanceId, scheduleId } = useParams();
+  const { store: { jwtToken } } = useAppContext();
+  const [seats, setSeats] = useState([]);
   const [selectedSeat, setSelectedSeat] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [isBooking, setIsBooking] = useState(false);
+
+  // rows, columns, performanceName은 performance 정보 받아온 거에 맞춰서 바꾸기
+  const rows = 10; 
+  const columns = 5; 
+  const performanceName = "햄릿"; 
+  const grades = ['S', 'S', 'A', 'A', 'B', 'B', 'B', 'B', 'B', 'B', 'B'];
+  const headers = { Authorization: jwtToken };
+
+  useEffect(() => {
+    const fetchSeats = async () => {
+      try {
+        const response = await axiosInstance.get(
+          `/api/v1/schedules/${scheduleId}/seats`,
+          { headers }
+        );
+
+        const seatData = response.data.data.map((seat) => ({
+          row: seat.row,
+          col: seat.col,
+          grade: seat.seatGrade,
+          price: seat.cost,
+          reserved: seat.seatStatus !== "AVALIABLE",
+          seatId: seat.seatId, 
+        }));
+
+        const sortedSeats = seatData.sort((a, b) => {
+          if (a.row === b.row) {
+            return a.col - b.col;
+          }
+          return a.row - b.row;
+        });
+
+        setSeats(sortedSeats);
+      } catch (error) {
+        console.error('Error fetching seat data:', error);
+        setError("좌석 정보를 불러오는데 실패하였습니다!");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchSeats();
+  }, []);
 
   const handleSeatSelect = (seatId) => {
-    if (selectedSeat === seatId) {
-      setSelectedSeat(null);
-    } else {
-      setSelectedSeat(seatId);
+    setSelectedSeat(selectedSeat === seatId ? null : seatId);
+  };
+
+  const handleBooking = async () => {
+    if (selectedSeat === null) return;
+
+    const selectedSeatData = seats[selectedSeat];
+    if (!selectedSeatData) {
+      alert("선택된 좌석이 유효하지 않습니다.");
+      return;
+    }
+
+    const bookingData = {
+      seatId: selectedSeatData.seatId,
+      scheduleId: scheduleId,
+    };
+
+    try {
+      setIsBooking(true);
+      await axiosInstance.post(
+        `http://localhost:10001/api/v1/orders?performanceId=${performanceId}`,
+        bookingData,
+        { headers }
+      );
+      alert("예매 성공!");
+    } catch (error) {
+      console.error("Error during booking:", error);
+      if (error.response) {
+        alert(error.response.data.message || "서버 오류가 발생했습니다.");
+      } else if (error.request) {
+        alert("서버 응답이 없습니다. 잠시 후 다시 시도해주세요.");
+      } else {
+        alert("알 수 없는 오류가 발생했습니다.");
+      }
+    } finally {
+      setIsBooking(false);
     }
   };
+
+  if (isLoading) {
+    return <div className="seat-page">Loading seats...</div>;
+  }
+
+  if (error) {
+    console.error("Error state:", error);
+    return <p>{error}</p>;
+  }
 
   return (
     <div className="seat-page">
@@ -42,7 +123,9 @@ function Seat() {
           <h2>{performanceName}</h2>
           {selectedSeat !== null ? (
             <div className="seat-info">
-              <p>좌석: {Math.floor(selectedSeat / columns) + 1}행 {selectedSeat % columns + 1}열</p>
+              <p>
+                좌석: {seats[selectedSeat].row}열 {seats[selectedSeat].col}행
+              </p>
               <p>등급: {seats[selectedSeat].grade}</p>
               <p>가격: {seats[selectedSeat].price}원</p>
             </div>
@@ -52,9 +135,10 @@ function Seat() {
         </div>
         <button
           className="booking-button"
-          disabled={selectedSeat === null}
+          onClick={handleBooking}
+          disabled={selectedSeat === null || isBooking} 
         >
-          예매하기
+          {isBooking ? "예약 중..." : "예매하기"}
         </button>
       </div>
     </div>

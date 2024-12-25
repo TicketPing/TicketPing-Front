@@ -19,7 +19,7 @@ function App() {
         <Route path='/mypage' element={<LoginRequiredRoute><MyPage /></LoginRequiredRoute>}></Route>
         <Route path='/performance/:id' element={<PerformanceDetail />} />
         <Route path='/performance/:id/schedule' element={<LoginRequiredRoute><SelectSchedule /></LoginRequiredRoute>} />
-        <Route path='/performance/:id/schedule/:id/seat' element={<LoginRequiredRoute><Seat /></LoginRequiredRoute>}></Route>
+        <Route path='/performance/:performanceId/schedule/:scheduleId/seat' element={<LoginRequiredRoute><Seat /></LoginRequiredRoute>}></Route>
         <Route path='/login' element={<Login />}></Route>
         <Route path='/join' element={<VerificationInfo />}></Route>
         <Route path='*' element={<NotFound />}></Route>

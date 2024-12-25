@@ -29,7 +29,7 @@ export default function SelectSchedule() {
   }, [id, headers]);
 
   const disabledDate = (current) => {
-    const hasSchedule = schedules.some(schedule => schedule.startTime.startsWith(current.format('YYYY-MM-DD')));
+    const hasSchedule = schedules.some(schedule => schedule.startDate.startsWith(current.format('YYYY-MM-DD')));
     return !hasSchedule; 
   };
 
@@ -39,7 +39,7 @@ export default function SelectSchedule() {
 
     const daysWithSchedules = schedules
       .filter(schedule => {
-        const scheduleDate = dayjs(schedule.startTime);
+        const scheduleDate = dayjs(schedule.startDate);
         return (
           scheduleDate.year() === year &&
           scheduleDate.month() === month
@@ -83,7 +83,7 @@ export default function SelectSchedule() {
   };
 
   const onDateSelect = (date) => {
-    const schedule = schedules.find(schedule => schedule.startTime.startsWith(date.format('YYYY-MM-DD')));
+    const schedule = schedules.find(schedule => schedule.startDate.startsWith(date.format('YYYY-MM-DD')));
     if (schedule) {
       setSelectedDateId(schedule.id);
     }
