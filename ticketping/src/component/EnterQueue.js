@@ -9,15 +9,15 @@ export const useEnterQueue = (setIsModalVisible) => {
   const { store: { jwtToken } } = useAppContext();
   const headers = { Authorization: jwtToken };
 
-  const enterQueue = async (performanceId) => {
+  const enterQueue = async (performance) => {
     try { 
-      const response = await axiosInstance.get(`/api/v1/waiting-queue?performanceId=${performanceId}`, { headers });
+      const response = await axiosInstance.get(`/api/v1/waiting-queue?performanceId=${performance.id}`, { headers });
       const tokenStatus = response.data.data.tokenStatus;
 
       if (tokenStatus === "WAITING") {
         setIsModalVisible(true); 
       } else if (tokenStatus === "WORKING") {
-        navigate(`/performance/${performanceId}/schedule`);
+        navigate(`/performance/${performance.id}/schedule`, { state: { performance } });
       }
     } catch (error) {
 
@@ -25,13 +25,13 @@ export const useEnterQueue = (setIsModalVisible) => {
       if (error.response && error.response.status === 404) {
         
         try {
-          const response = await axiosInstance.post(`/api/v1/waiting-queue?performanceId=${performanceId}`, {}, { headers });
+          const response = await axiosInstance.post(`/api/v1/waiting-queue?performanceId=${performance.id}`, {}, { headers });
           const tokenStatus = response.data.data.tokenStatus;
 
           if (tokenStatus === "WAITING") {
             setIsModalVisible(true); 
           } else if (tokenStatus === "WORKING") {
-            navigate(`/performance/${performanceId}/schedule`);
+            navigate(`/performance/${performance.id}/schedule`, { state: { performance } });
           }
         } catch (error) {
           if (error.response) {
