@@ -34,7 +34,7 @@ function Seat() {
           col: seat.col,
           grade: seat.seatGrade,
           price: seat.cost,
-          reserved: seat.seatStatus !== "AVALIABLE",
+          reserved: seat.seatStatus !== "AVAILABLE",
           seatId: seat.seatId, 
         }));
 
