@@ -1,0 +1,35 @@
+.checkout-container {
+    display: flex;
+    justify-content: center; 
+    height: 660px; 
+    background-color: white; 
+}
+
+.wrapper {
+    background: white;
+    padding: 20px; 
+    border-radius: 8px; 
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 400px; 
+}
+
+.box_section {
+    margin-bottom: 20px; 
+}
+
+.checkout-button {
+    width: 20%; 
+    background-color: #4A90E2; 
+    color: white; 
+    border-radius: 5px; 
+}
+
+.checkout-button:disabled {
+    background-color: #ccc; 
+    cursor: not-allowed; 
+}
+
+.checkable {
+    display: flex; 
+    align-items: center; 
+}

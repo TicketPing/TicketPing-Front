@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@tosspayments/tosspayments-sdk": "^2.3.4",
     "antd": "^5.22.5",
     "axios": "^1.7.9",
     "axios-hooks": "^5.0.2",

@@ -29,7 +29,7 @@ export default function SelectSchedule() {
     };
 
     fetchSchedules();
-  }, [id, headers]);
+  }, []);
 
   const disabledDate = (current) => {
     const hasSchedule = schedules.some(schedule => schedule.startDate.startsWith(current.format('YYYY-MM-DD')));
