@@ -151,7 +151,7 @@ function PerformanceDetail() {
         <QueueInfoModal
           visible={isModalVisible}
           onClose={() => setIsModalVisible(false)}
-          performanceId={id}
+          performance={performance}
         />
       </div>
     </div>
