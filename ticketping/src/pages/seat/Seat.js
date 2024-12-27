@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { axiosInstance } from "../../api";
 import { useAppContext } from "../../store";
+import { notification } from "antd";
+import { FrownOutlined } from "@ant-design/icons";
 import SeatLayout from './SeatLayout';
 import '../../style/Seat.css';
 
 function Seat() {
   const location = useLocation();
+  const navigate = useNavigate();
   const { performance } = location.state || {};
   const { performanceId, scheduleId } = useParams();
   const { store: { jwtToken } } = useAppContext();
@@ -79,21 +82,25 @@ function Seat() {
 
     try {
       setIsBooking(true);
-      await axiosInstance.post(
+      const response = await axiosInstance.post(
         `http://localhost:10001/api/v1/orders?performanceId=${performanceId}`,
         bookingData,
         { headers }
-      );
-      alert("예매 성공!");
+      );      
+      navigate('/checkout', { state: { order: response.data.data } });
     } catch (error) {
       console.error("Error during booking:", error);
       if (error.response) {
-        alert(error.response.data.message || "서버 오류가 발생했습니다.");
-      } else if (error.request) {
-        alert("서버 응답이 없습니다. 잠시 후 다시 시도해주세요.");
+        notification.open({
+          message: error.response.data.message || "서버 오류가 발생했습니다.",
+          icon: <FrownOutlined style={{ color: "#ff3333" }} />,
+        });
       } else {
-        alert("알 수 없는 오류가 발생했습니다.");
-      }
+        notification.open({
+          message: "서버 응답이 없습니다. 잠시 후 다시 시도해주세요.",
+          icon: <FrownOutlined style={{ color: "#ff3333" }} />,
+        });
+      } 
     } finally {
       setIsBooking(false);
     }

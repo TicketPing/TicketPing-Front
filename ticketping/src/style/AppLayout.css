@@ -13,7 +13,6 @@
     justify-content: space-between; 
     align-items: center; 
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), 0 4px 8px rgba(0, 0, 0, 0.1); 
-    border-bottom: 1px solid white;
     position: relative; 
 }
 
