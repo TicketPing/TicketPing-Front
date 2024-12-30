@@ -1,21 +1,24 @@
+import React, { useEffect, useState } from "react";
 import { loadTossPayments } from "@tosspayments/tosspayments-sdk";
-import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { axiosInstance } from "../../api";
 import { useAppContext } from "../../store";
-import '../../style/Checkout.css';
+import { useCheckExpiredToken } from "../../component/CheckExpiredToken";
+import PreventBack from "../../component/PreventBack";
+import "../../style/Checkout.css";
 
 export function Checkout() {
   const location = useLocation();
   const { order } = location.state || {};
   const { store: { jwtToken } } = useAppContext();
   const headers = { Authorization: jwtToken };
+  const { checkExpiredToken } = useCheckExpiredToken();
 
   const clientKey = process.env.REACT_APP_TOSS_CLIENT_KEY;
   const customerKey = order.userId;
   const [amount, setAmount] = useState({
     currency: "KRW",
-    value: order.price,
+    value: order.amount,
   });
   const [ready, setReady] = useState(false);
   const [widgets, setWidgets] = useState(null);
@@ -74,12 +77,14 @@ export function Checkout() {
         });
       }
     } catch (error) {
+      checkExpiredToken(error.response.data);
       console.error("Error requesting payment:", error);
     }
   };
 
   return (
     <div className="checkout-container">
+      <PreventBack /> {/* PreventBack 컴포넌트 추가 */}
       <div className="wrapper">
         <div className="box_section">
           {/* 결제 UI */}

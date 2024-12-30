@@ -142,6 +142,7 @@ function PerformanceDetail() {
           </tbody>
         </table>
         <button 
+          className="performance-select-button"
           disabled={timeRemaining !== "공연 예매하기"}
           onClick={() => handleEnterQueue(performance)} 
         >

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useCheckExpiredToken } from "../component/CheckExpiredToken"; 
 import { axiosInstance } from "../api";
 import { useAppContext } from "../store";
 import { Calendar, Button } from 'antd';
@@ -11,6 +12,7 @@ export default function SelectSchedule() {
   const navigate = useNavigate();
   const location = useLocation();
   const { performance } = location.state || {};
+  const { checkExpiredToken } = useCheckExpiredToken();
 
   const { store: { jwtToken } } = useAppContext();
   const headers = { Authorization: jwtToken };
@@ -22,9 +24,9 @@ export default function SelectSchedule() {
     const fetchSchedules = async () => {
       try {
         const response = await axiosInstance.get(`/api/v1/performances/${id}/schedules`, { headers });
-        setSchedules(response.data.data.content);
+        setSchedules(response.data.data);
       } catch (err) {
-
+        checkExpiredToken(err.response.data);
       } 
     };
 
@@ -103,7 +105,7 @@ export default function SelectSchedule() {
       <div className="button-container">
         <Button 
           onClick={handleDateSelect} 
-          style={{ width: '15%', height: '50%' }}
+          className= "date-select-button"   
         >
           선택
         </Button>

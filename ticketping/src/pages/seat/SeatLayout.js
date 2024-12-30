@@ -38,7 +38,7 @@ function SeatLayout({ rows, columns, grades, seats, selectedSeat, onSeatSelect }
           onClick={() => handleSeatClick(seats.indexOf(seat))}
           title={seat ? `등급: ${seat.grade}, 가격: ${seat.price}원` : ''}
         >
-          {i}-{j}
+          {/* {i}-{j} */}
         </div>
       );
     }

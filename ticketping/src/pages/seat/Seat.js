@@ -4,27 +4,38 @@ import { axiosInstance } from "../../api";
 import { useAppContext } from "../../store";
 import { notification } from "antd";
 import { FrownOutlined } from "@ant-design/icons";
+import { useCheckExpiredToken } from "../../component/CheckExpiredToken"; 
 import SeatLayout from './SeatLayout';
 import '../../style/Seat.css';
 
 function Seat() {
   const location = useLocation();
   const navigate = useNavigate();
+
   const { performance } = location.state || {};
   const { performanceId, scheduleId } = useParams();
+  const { checkExpiredToken } = useCheckExpiredToken();
   const { store: { jwtToken } } = useAppContext();
+  const headers = { Authorization: jwtToken };
+
   const [seats, setSeats] = useState([]);
   const [selectedSeat, setSelectedSeat] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isBooking, setIsBooking] = useState(false);
 
-  // rows, columns, performanceName은 performance 정보 받아온 거에 맞춰서 바꾸기
-  const rows = 10; 
-  const columns = 5; 
-  const performanceName = performance.name; 
-  const grades = ['S', 'S', 'A', 'A', 'B', 'B', 'B', 'B', 'B', 'B', 'B'];
-  const headers = { Authorization: jwtToken };
+  const performanceName = performance.name;
+  const rows = performance.rows;
+  const columns = performance.columns;
+  const grades = Array.from({ length: rows }, (_, index) => {
+    if (index < rows * 0.2) {
+      return 'S';
+    } else if (index < rows * 0.4) {
+      return 'A';
+    } else {
+      return 'B';
+    }
+  });
 
   useEffect(() => {
     const fetchSeats = async () => {
@@ -52,6 +63,7 @@ function Seat() {
 
         setSeats(sortedSeats);
       } catch (error) {
+        checkExpiredToken(error.response.data);
         console.error('Error fetching seat data:', error);
         setError("좌석 정보를 불러오는데 실패하였습니다!");
       } finally {
@@ -75,20 +87,16 @@ function Seat() {
       return;
     }
 
-    const bookingData = {
-      seatId: selectedSeatData.seatId,
-      scheduleId: scheduleId,
-    };
-
     try {
       setIsBooking(true);
-      const response = await axiosInstance.post(
-        `http://localhost:10001/api/v1/orders?performanceId=${performanceId}`,
-        bookingData,
+      await axiosInstance.post(
+        `http://localhost:10001/api/v1/seats/${selectedSeatData.seatId}/pre-reserve?performanceId=${performanceId}&scheduleId=${scheduleId}`,
+        {},
         { headers }
       );      
-      navigate('/checkout', { state: { order: response.data.data } });
+      navigate(`/performance/${performanceId}/schedule/${scheduleId}/order`, { state: { performance: performance, seat: selectedSeatData } });
     } catch (error) {
+      checkExpiredToken(error.response.data);
       console.error("Error during booking:", error);
       if (error.response) {
         notification.open({
@@ -104,6 +112,10 @@ function Seat() {
     } finally {
       setIsBooking(false);
     }
+  };
+
+  const formatPrice = (price) => {
+    return price.toLocaleString();
   };
 
   if (isLoading) {
@@ -136,7 +148,7 @@ function Seat() {
                 좌석: {seats[selectedSeat].row}열 {seats[selectedSeat].col}행
               </p>
               <p>등급: {seats[selectedSeat].grade}</p>
-              <p>가격: {seats[selectedSeat].price}원</p>
+              <p>가격: {formatPrice(seats[selectedSeat].price)}원</p>
             </div>
           ) : (
             <p>선택된 좌석이 없습니다.</p>
