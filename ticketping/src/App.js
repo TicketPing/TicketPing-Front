@@ -5,6 +5,7 @@ import Main from './pages/Main';
 import PerformanceDetail from './pages/PerformanceDetail'
 import SelectSchedule from './pages/SelectSchedule';
 import Seat from './pages/seat/Seat'
+import Order from './pages/Order'
 import AppLayout from './component/AppLayout';
 import Login from './pages/Login';
 import VerificationInfo from './pages/Join';
@@ -25,6 +26,7 @@ function App() {
         <Route path='/performance/:id' element={<PerformanceDetail />} />
         <Route path='/performance/:id/schedule' element={<LoginRequiredRoute><SelectSchedule /></LoginRequiredRoute>} />
         <Route path='/performance/:performanceId/schedule/:scheduleId/seat' element={<LoginRequiredRoute><Seat /></LoginRequiredRoute>}></Route>
+        <Route path='/performance/:performanceId/schedule/:scheduleId/order' element={<LoginRequiredRoute><Order /></LoginRequiredRoute>}></Route>
         <Route path='/checkout' element={<LoginRequiredRoute><Checkout /></LoginRequiredRoute>}></Route>
         <Route path='/success' element={<LoginRequiredRoute><Success /></LoginRequiredRoute>}></Route>
         <Route path='/fail' element={<LoginRequiredRoute><Fail /></LoginRequiredRoute>}></Route>

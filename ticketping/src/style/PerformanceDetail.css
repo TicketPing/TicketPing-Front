@@ -65,7 +65,7 @@
   padding: 15px 20px;
 }
 
-button {
+.performance-select-button {
   position: absolute;
   bottom: 20px;
   left: 50%; 
@@ -80,11 +80,11 @@ button {
   transition: background-color 0.3s;
 }
 
-button:hover {
+.performance-select-button:hover {
   background-color: #0056b3;
 }
 
-button:disabled {
+.performance-select-button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
   color: #666;

@@ -53,3 +53,11 @@ h1 {
   margin-top: 20px;
   margin-bottom: -10px
 }
+
+.date-select-button {
+  width: 15%;
+  height: 50%;
+  left: 50%; 
+  transform: translateX(-50%);
+  bottom: 20px;
+}

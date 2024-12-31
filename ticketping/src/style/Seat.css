@@ -1,15 +1,14 @@
 .seat-page {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: flex-start;
-  margin: 20px;
+  margin: 20px auto;
 }
 
 .seat-layout-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
   min-height: 550px;
 }
 
