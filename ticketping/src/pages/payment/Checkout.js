@@ -66,7 +66,7 @@ export function Checkout() {
 
     try {
       // 주문 검증 API 호출
-      const response = await axiosInstance.post(`/api/v1/orders/${order.id}/validate`, null, { headers });
+      const response = await axiosInstance.post(`/api/v1/orders/${order.id}/validate?performanceId=${order.performanceId}`, null, { headers });
 
       if (response.status == 200) {
         await widgets.requestPayment({
