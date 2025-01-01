@@ -9,7 +9,7 @@ import Order from './pages/Order'
 import AppLayout from './component/AppLayout';
 import Login from './pages/Login';
 import VerificationInfo from './pages/Join';
-import MyPage from './pages/MyPage';
+import MyOrder from './pages/MyOrder';
 import NotFound from './pages/NotFound';
 import Checkout from './pages/payment/Checkout';
 import Success from './pages/payment/Success';
@@ -22,7 +22,8 @@ function App() {
         <Route path='/' element={<Main />}></Route>
         <Route path='/login' element={<Login />}></Route>
         <Route path='/join' element={<VerificationInfo />}></Route>
-        <Route path='/mypage' element={<LoginRequiredRoute><MyPage /></LoginRequiredRoute>}></Route>
+        <Route path='/myorder' element={<MyOrder />}></Route>
+        {/* <Route path='/myorder' element={<LoginRequiredRoute><MyOrder /></LoginRequiredRoute>}></Route> */}
         <Route path='/performance/:id' element={<PerformanceDetail />} />
         <Route path='/performance/:id/schedule' element={<LoginRequiredRoute><SelectSchedule /></LoginRequiredRoute>} />
         <Route path='/performance/:performanceId/schedule/:scheduleId/seat' element={<LoginRequiredRoute><Seat /></LoginRequiredRoute>}></Route>

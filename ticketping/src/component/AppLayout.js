@@ -28,9 +28,9 @@ function AppLayout({ children }) {
           <Button
             type="link"
             className="auth-button"
-            onClick={() => navigate("/mypage")}
+            onClick={() => navigate("/myorder")}
           >
-            MyPage
+            MyOrder
           </Button>
           {isAuthenticated ? (
             <Button type="link" className="auth-button" onClick={logout}>

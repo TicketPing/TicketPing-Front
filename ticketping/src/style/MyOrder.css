@@ -1,0 +1,95 @@
+.myorder-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.myorder-title {
+  text-align: center;
+  width: 100%;
+  font-size: 30px;
+  margin-bottom: 20px;
+}
+
+.myorder-list {
+  padding: 10px;
+  width: 50%;
+  min-width: 500px;
+}
+
+.no-orders-message {
+  display: flex;
+  justify-content: center;
+  height: 50vh;
+  font-size: 24px;
+  font-weight: bold;
+  color: #555;
+  text-align: center;
+}
+
+
+.myorder-detail {
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0;
+  border-bottom: 1px solid #ddd;
+  width: 100%;
+}
+
+.myorder-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 20px;
+}
+
+.performance-name {
+  font-weight: bold;
+  margin-left: 10px; 
+}
+
+.order-status {
+  display: inline-block;
+  width: 80px;
+  padding: 5px 20px;
+  border-radius: 50px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.payment-completed {
+  border: 2px solid #28A745;
+  color: #28A745;
+}
+
+.canceled {
+  border: 2px solid #DC3545;
+  color: #DC3545;
+}
+
+.order-table {
+  width: 100%;
+  table-layout: fixed;
+  border-spacing: 0;
+}
+
+.order-label {
+  width: 20%;
+  font-weight: bold;
+  text-align: left;
+}
+
+.order-table td {
+  padding: 5px;
+  border: none;
+}
+
+.order-table td:first-child {
+  font-weight: bold;
+}
+
+.first-order {
+  border-top: 1px solid #ddd;
+}
