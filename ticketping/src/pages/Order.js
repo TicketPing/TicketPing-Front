@@ -44,10 +44,13 @@ function Order() {
   const handlePayment = async () => {
     try {
       const response = await axiosInstance.post(
-        `http://localhost:10001/api/v1/orders?performanceId=${performanceId}&scheduleId=${scheduleId}&seatId=${seat.seatId}`,
-        {},
+        `http://localhost:10001/api/v1/orders?performanceId=${performanceId}`,
+        {
+          scheduleId: scheduleId,
+          seatId: seat.seatId
+        },
         { headers }
-      );      
+      );     
       navigate('/checkout', { state: { order: response.data.data } });
     } catch (error) {
       checkExpiredToken(error.response.data);
