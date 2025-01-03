@@ -37,6 +37,11 @@ function Seat() {
     }
   });
 
+  const seatCostMap = performance.seatCostResponses?.reduce((map, costInfo) => {
+    map[costInfo.seatGrade] = costInfo.cost;
+    return map;
+  }, {});
+
   useEffect(() => {
     const fetchSeats = async () => {
       try {
@@ -49,7 +54,7 @@ function Seat() {
           row: seat.row,
           col: seat.col,
           grade: seat.seatGrade,
-          price: seat.cost,
+          price: seatCostMap[seat.seatGrade] || 0,
           reserved: seat.seatStatus !== "AVAILABLE",
           seatId: seat.seatId, 
         }));

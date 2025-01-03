@@ -17,7 +17,7 @@ export const useCheckExpiredToken = () => {
         );
         const jwtToken = response.data.data.accessToken;
 
-        dispatch(deleteToken());
+        // dispatch(deleteToken());
         dispatch(setToken(jwtToken));
       } catch (err) {
 
