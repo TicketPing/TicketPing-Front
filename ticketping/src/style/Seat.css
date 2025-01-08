@@ -49,7 +49,6 @@
 
 .booking-button:hover {
   background-color: #4a1cef;
-  cursor: not-allowed;
   opacity: 1;
 }
 
