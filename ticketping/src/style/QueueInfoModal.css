@@ -47,4 +47,13 @@
   margin-bottom: -5px;
   width: auto; 
 }
+
+.queue-modal-btn {
+  margin-top: 25px;
+  margin-bottom: -5px;
+  width: auto; 
+  display: block; /* 버튼을 블록 요소로 변경 */
+  margin-left: auto; /* 왼쪽 여백 자동 */
+  margin-right: auto; /* 오른쪽 여백 자동 */
+}
   

@@ -70,7 +70,7 @@ const QueueInfoModal = ({ visible, onClose, performance }) => {
         <p>현재 접속량이 많아 대기 중입니다.</p>
         <p>잠시만 기다려 주시면 예매 페이지로 연결됩니다.</p>
       </div>
-      <Button key="back" onClick={onClose}>
+      <Button className="queue-modal-btn" key="back" onClick={onClose}>
         닫기
       </Button>
     </Modal>
