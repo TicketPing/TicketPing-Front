@@ -63,12 +63,12 @@ export function Checkout() {
 
   const requestPayment = async () => {
     if (!widgets) return;
-
+  
     try {
       // 주문 검증 API 호출
       const response = await axiosInstance.post(`/api/v1/orders/${order.id}/validate?performanceId=${order.performanceId}`, null, { headers });
-
-      if (response.status == 200) {
+  
+      if (response.status === 200) {
         await widgets.requestPayment({
           orderId: order.id,
           orderName: "공연: " + order.performanceName,
@@ -77,8 +77,12 @@ export function Checkout() {
         });
       }
     } catch (error) {
-      checkExpiredToken(error.response.data);
-      console.error("Error requesting payment:", error);
+      if (error.response) {
+        checkExpiredToken(error.response.data);
+        console.error("결제 요청 중 오류 발생:", error.response.data);
+      } else {
+        console.error("결제 요청 중 오류 발생:", error.message);
+      }
     }
   };
 
